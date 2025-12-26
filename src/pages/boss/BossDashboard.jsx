@@ -321,7 +321,7 @@ export default function BossDashboard({ user, onLogout }) {
   }
 
   return (
-    <div className="p-6">
+    <div>
       {/* Welcome Message */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Welcome back, {user?.name || 'Boss'}!</h1>
@@ -329,7 +329,7 @@ export default function BossDashboard({ user, onLogout }) {
       </div>
 
       {/* KPI Cards Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
         {/* Total Clients Card */}
         <motion.div 
           className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white"
@@ -394,7 +394,7 @@ export default function BossDashboard({ user, onLogout }) {
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6">
         {/* Client Status Distribution */}
         <motion.div 
           className="card bg-white rounded-xl shadow-lg border border-gray-100"
@@ -501,7 +501,7 @@ export default function BossDashboard({ user, onLogout }) {
       </div>
 
       {/* Bottom Section */}
-      <div className="grid grid-cols-1 gap-6">
+      <div className="grid grid-cols-1 gap-4 sm:gap-6">
         {/* Recent Activity Log */}
         <motion.div 
           className="card bg-white rounded-xl shadow-lg border border-gray-100"

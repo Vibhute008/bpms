@@ -59,7 +59,8 @@ export default function ClientView({ user, onLogout }) {
 
       {/* Clients Table */}
       <div className="card">
-        <div className="overflow-x-auto">
+        {/* Table view for larger screens */}
+        <div className="overflow-x-auto hidden md:block">
           <table className="table">
             <thead>
               <tr>
@@ -97,7 +98,7 @@ export default function ClientView({ user, onLogout }) {
                   <td colSpan="6" className="text-center py-12">
                     <div className="flex flex-col items-center justify-center">
                       <svg className="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0z" />
                       </svg>
                       <h3 className="mt-2 text-lg font-medium text-gray-900">No clients found</h3>
                       <p className="mt-1 text-gray-500">Try adjusting your search terms</p>
@@ -107,6 +108,51 @@ export default function ClientView({ user, onLogout }) {
               )}
             </tbody>
           </table>
+        </div>
+        
+        {/* Card view for mobile */}
+        <div className="block md:hidden">
+          {filteredClients.length > 0 ? (
+            filteredClients.map((client) => (
+              <div key={client.id} className="border-b border-gray-200 py-4 last:border-b-0">
+                <div className="flex justify-between items-start">
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-gray-900 truncate">{client.name}</div>
+                    <div className="text-gray-500 text-sm mt-1">{client.email}</div>
+                    <div className="mt-2 space-y-1">
+                      <div className="text-sm text-gray-700">
+                        <span className="font-medium">Company:</span> {client.company}
+                      </div>
+                      <div className="text-sm text-gray-700">
+                        <span className="font-medium">Contact:</span> {client.contactPerson}
+                      </div>
+                      <div className="text-sm text-gray-700">
+                        <span className="font-medium">Phone:</span> {client.phone}
+                      </div>
+                      <div className="mt-2">
+                        <span className={`badge ${client.status === 'Active' ? 'badge-success' : 'badge-warning'}`}>
+                          {client.status}
+                        </span>
+                      </div>
+                      <div className="mt-2">
+                        <span className="font-medium text-gray-900">{client.projects} Projects</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="text-center py-12">
+              <div className="flex flex-col items-center justify-center">
+                <svg className="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <h3 className="mt-2 text-lg font-medium text-gray-900">No clients found</h3>
+                <p className="mt-1 text-gray-500">Try adjusting your search terms</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

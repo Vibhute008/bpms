@@ -610,7 +610,7 @@ export default function ProductionView({ user, onLogout }) {
   };
 
   return (
-    <div className="p-6">
+    <div>
       <div className="mb-8">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-2">
           <div>

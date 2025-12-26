@@ -555,7 +555,8 @@ export default function ProductionView({ user, onLogout }) {
             </div>
           </div>
         </div>
-        <div className="overflow-x-auto">
+        {/* Table view for larger screens */}
+        <div className="overflow-x-auto hidden md:block">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
@@ -563,7 +564,7 @@ export default function ProductionView({ user, onLogout }) {
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Project</th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Photos</th>
-                <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>            </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredEntries.length > 0 ? (
@@ -573,24 +574,24 @@ export default function ProductionView({ user, onLogout }) {
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{entry.projectName}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{formatNumber(entry.quantity)}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{entry.photos ? entry.photos.length : 0} photos</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex justify-end space-x-2">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <div className="flex flex-col space-y-1">
                         <button 
-                          className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200"
+                          className="inline-flex items-center px-2 py-1 text-xs font-medium text-indigo-700 bg-indigo-100 rounded hover:bg-indigo-200 transition-all duration-200"
                           onClick={() => toggleEntryExpansion(entry.id)}
                         >
-                          {expandedEntry === entry.id ? 'Hide Details' : 'View'}
+                          {expandedEntry === entry.id ? 'Hide' : 'View'}
                         </button>
                         {(user.role === 'SUPER_ADMIN' || user.role === 'ADMIN' || (user.role === 'OPERATOR' && entry.projectId && projects.find(p => p.id === entry.projectId)?.factory === user.factory)) && (
                           <>
                             <button 
-                              className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
+                              className="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-700 bg-blue-100 rounded hover:bg-blue-200 transition-all duration-200"
                               onClick={() => handleEditEntry(entry)}
                             >
                               Edit
                             </button>
                             <button 
-                              className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200"
+                              className="inline-flex items-center px-2 py-1 text-xs font-medium text-red-700 bg-red-100 rounded hover:bg-red-200 transition-all duration-200"
                               onClick={() => handleDeleteEntry(entry)}
                             >
                               Delete
@@ -603,7 +604,7 @@ export default function ProductionView({ user, onLogout }) {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5" className="text-center py-12">
+                  <td colSpan="5" className="text-center py-8">
                     <div className="flex flex-col items-center justify-center">
                       <svg className="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -620,6 +621,76 @@ export default function ProductionView({ user, onLogout }) {
               )}
             </tbody>
           </table>
+        </div>
+        
+        {/* Card layout for mobile */}
+        <div className="block md:hidden">
+          {filteredEntries.length > 0 ? (
+            filteredEntries.map((entry) => (
+              <div key={entry.id} className="bg-white rounded-lg shadow border border-gray-200 p-4 hover:shadow-md transition-shadow duration-200">
+                <div className="flex justify-between items-start">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap gap-4 mb-2">
+                      <div>
+                        <p className="text-xs text-gray-500">Date</p>
+                        <p className="text-sm font-medium text-gray-900">{entry.date}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Project</p>
+                        <p className="text-sm font-medium text-gray-900 truncate max-w-[120px]">{entry.projectName}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Quantity</p>
+                        <p className="text-sm font-medium text-gray-900">{formatNumber(entry.quantity)}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Photos</p>
+                        <p className="text-sm font-medium text-gray-900">{entry.photos ? entry.photos.length : 0}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex flex-col space-y-2 ml-4">
+                    <button 
+                      className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-indigo-700 bg-indigo-100 rounded hover:bg-indigo-200 transition-all duration-200"
+                      onClick={() => toggleEntryExpansion(entry.id)}
+                    >
+                      {expandedEntry === entry.id ? 'Hide' : 'View'}
+                    </button>
+                    {(user.role === 'SUPER_ADMIN' || user.role === 'ADMIN' || (user.role === 'OPERATOR' && entry.projectId && projects.find(p => p.id === entry.projectId)?.factory === user.factory)) && (
+                      <>
+                        <button 
+                          className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded hover:bg-blue-200 transition-all duration-200"
+                          onClick={() => handleEditEntry(entry)}
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-red-700 bg-red-100 rounded hover:bg-red-200 transition-all duration-200"
+                          onClick={() => handleDeleteEntry(entry)}
+                        >
+                          Delete
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="text-center py-12">
+              <div className="flex flex-col items-center justify-center">
+                <svg className="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <h3 className="mt-2 text-lg font-medium text-gray-900">No production entries found</h3>
+                <p className="mt-1 text-gray-500 max-w-md mx-auto">
+                  {user.role === 'OPERATOR' 
+                    ? 'No production data has been entered for your factory yet. Start by adding production entries in the Daily Entry section.' 
+                    : 'No production data has been entered yet. Supervisors need to submit daily production entries for data to appear here.'}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

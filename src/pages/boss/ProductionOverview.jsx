@@ -46,7 +46,7 @@ export default function ProductionOverview({ user, onLogout }) {
 
 
   return (
-    <div className="p-6">
+    <div>
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Production Overview</h1>

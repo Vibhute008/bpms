@@ -161,7 +161,7 @@ Grand Total,,,"₹0"`;
   };
 
   return (
-    <div className="p-6">
+    <div>
       {/* Action Bar */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
         <h2 className="text-2xl font-bold text-gray-900 mb-4 md:mb-0">Project Management</h2>
@@ -183,7 +183,8 @@ Grand Total,,,"₹0"`;
 
       {/* Projects Table */}
       <div className="card">
-        <div className="overflow-x-auto">
+        {/* Table view for larger screens */}
+        <div className="overflow-x-auto hidden md:block">
           <table className="table">
             <thead>
               <tr>
@@ -272,6 +273,79 @@ Grand Total,,,"₹0"`;
               )}
             </tbody>
           </table>
+        </div>
+        
+        {/* Card view for mobile */}
+        <div className="block md:hidden">
+          {filteredProjects.length > 0 ? (
+            filteredProjects.map((project) => {
+              const projectInvoices = getProjectInvoices(project.id);
+              return (
+                <div key={project.id} className="border-b border-gray-200 py-4 last:border-b-0">
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-gray-900 mb-1">{project.name}</div>
+                      <div className="text-sm text-gray-900 mb-1">{project.client}</div>
+                      <div className="text-sm text-gray-700 mb-1">
+                        <div>{project.subject}</div>
+                        <div className="text-gray-500">{project.language}</div>
+                      </div>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        <span className="badge badge-info">{project.factory}</span>
+                        <div className="text-xs text-gray-700">
+                          <div>{project.startDate}</div>
+                          <div className="text-gray-500">to {project.endDate}</div>
+                        </div>
+                        <span className={`badge ${
+                          project.status === 'completed' ? 'badge-success' : 
+                          project.status === 'ongoing' ? 'badge-warning' : 'badge-secondary'
+                        }`}>
+                          {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
+                        </span>
+                      </div>
+                      
+                      {/* Display uploaded invoices - only for bosses and accountants */}
+                      {user && (user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') && projectInvoices.length > 0 && (
+                        <div className="mt-2 text-left">
+                          <div className="text-xs text-gray-500">Uploaded Invoices:</div>
+                          {projectInvoices.map(invoice => (
+                            <div key={invoice.id} className="flex items-center text-xs mt-1">
+                              <span 
+                                className="text-blue-600 hover:underline cursor-pointer truncate max-w-[120px]"
+                                onClick={() => handleFileOpen(invoice.fileName)}
+                                title={invoice.fileName}
+                              >
+                                {invoice.fileName}
+                              </span>
+                              <span className="ml-1 text-gray-400">({invoice.uploadedBy})</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    <div className="ml-4">
+                      <button 
+                        className="btn btn-primary"
+                        onClick={() => handleFileUpload(project.id)}
+                      >
+                        Upload Invoice
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <div className="text-center py-12">
+              <div className="flex flex-col items-center justify-center">
+                <svg className="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+                <h3 className="mt-2 text-lg font-medium text-gray-900">No projects found</h3>
+                <p className="mt-1 text-gray-500">Try adjusting your search terms</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

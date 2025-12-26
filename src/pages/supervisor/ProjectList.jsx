@@ -32,9 +32,9 @@ export default function ProjectList({ user, onLogout }) {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div>
       {/* Main Content */}
-      <main className="p-6">
+      <main>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-900 mb-4 md:mb-0">Assigned Projects</h2>
           <div className="relative">
@@ -77,16 +77,16 @@ export default function ProjectList({ user, onLogout }) {
           <>
             {/* Projects Grid */}
             {filteredProjects.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredProjects.map((project) => (
-                  <div key={project.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200">
-                    <div className="p-6">
-                      <div className="flex justify-between items-start mb-4">
-                        <div>
-                          <h3 className="text-lg font-bold text-gray-900 truncate">{project.name}</h3>
-                          <p className="text-sm text-gray-600 mt-1">{project.client}</p>
+                  <div key={project.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200 flex flex-col h-full">
+                    <div className="p-4 sm:p-5">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-3">
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-base sm:text-lg font-bold text-gray-900 truncate">{project.name}</h3>
+                          <p className="text-xs sm:text-sm text-gray-600 mt-1 truncate">{project.client}</p>
                         </div>
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${{
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0 ${{
                           ongoing: 'bg-green-100 text-green-800',
                           pending: 'bg-yellow-100 text-yellow-800',
                           delayed: 'bg-red-100 text-red-800',
@@ -96,13 +96,13 @@ export default function ProjectList({ user, onLogout }) {
                         </span>
                       </div>
                       
-                      <div className="mb-4">
-                        <p className="text-gray-700 text-sm mb-1">{project.subject}</p>
-                        <p className="text-gray-500 text-xs">{project.language}</p>
+                      <div className="mb-3">
+                        <p className="text-gray-700 text-xs sm:text-sm mb-1 truncate">{project.subject}</p>
+                        <p className="text-gray-500 text-xs truncate">{project.language}</p>
                       </div>
                       
-                      <div className="mb-4">
-                        <div className="flex justify-between text-sm mb-1">
+                      <div className="mb-3">
+                        <div className="flex justify-between text-xs sm:text-sm mb-1">
                           <span className="font-medium text-gray-700">Progress</span>
                           <span className="text-gray-600">{Math.round((project.produced / project.totalQuantity) * 100)}%</span>
                         </div>
@@ -117,27 +117,28 @@ export default function ProjectList({ user, onLogout }) {
                         </div>
                       </div>
                       
-                      <div className="flex justify-between text-sm mb-4">
+                      <div className="grid grid-cols-2 gap-2 text-xs sm:text-sm mb-3">
                         <div>
-                          <p className="font-medium text-gray-700">Start Date</p>
-                          <p className="text-gray-600">{project.startDate}</p>
+                          <p className="font-medium text-gray-700">Start</p>
+                          <p className="text-gray-600 truncate">{project.startDate}</p>
                         </div>
                         <div>
-                          <p className="font-medium text-gray-700">End Date</p>
-                          <p className="text-gray-600">{project.endDate}</p>
+                          <p className="font-medium text-gray-700">End</p>
+                          <p className="text-gray-600 truncate">{project.endDate}</p>
                         </div>
                         <div>
                           <p className="font-medium text-gray-700">Factory</p>
-                          <p className="text-gray-600">{project.factory}</p>
+                          <p className="text-gray-600 truncate">{project.factory}</p>
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-700">Qty</p>
+                          <p className="text-gray-600 truncate">{project.quantity}</p>
                         </div>
                       </div>
                       
-                      <div className="flex justify-between items-center pt-4 border-t border-gray-100">
-                        <div className="text-xs text-gray-500">
+                      <div className="text-xs pt-2 border-t border-gray-100 mt-auto">
+                        <div className="text-gray-500">
                           Deadline: {new Date(project.deadline).toLocaleDateString()}
-                        </div>
-                        <div className="text-xs font-medium text-indigo-600">
-                          {project.quantity} books
                         </div>
                       </div>
                     </div>

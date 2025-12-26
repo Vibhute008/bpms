@@ -89,7 +89,7 @@ export default function ActivityLog({ currentUser }) {
         {filteredActivities.length > 0 ? (
           <ul className="divide-y divide-gray-200">
             {filteredActivities.map((activity) => (
-              <li key={activity.id} className="px-6 py-4">
+              <li key={activity.id} className="px-4 py-3 sm:px-6">
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
                     <div className={`h-10 w-10 rounded-full flex items-center justify-center ${activity.userRole === 'SUPER_ADMIN' ? 'bg-purple-100' : activity.userRole === 'ADMIN' ? 'bg-blue-100' : activity.userRole === 'OPERATOR' ? 'bg-green-100' : 'bg-gray-100'}`}>
@@ -112,22 +112,22 @@ export default function ActivityLog({ currentUser }) {
                       )}
                     </div>
                   </div>
-                  <div className="ml-4 flex-1">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">
+                  <div className="ml-3 flex-1 min-w-0">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-gray-900 truncate">
                           {activity.userRole === 'SUPER_ADMIN' ? 'Boss' : activity.userRole === 'ADMIN' ? 'Accountant' : activity.userRole === 'OPERATOR' ? `Supervisor (${activity.userFactory})` : activity.userRole}
                         </p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-gray-500 truncate">
                           {getActionText(activity.action)} {getEntityTypeText(activity.entityType)}: {activity.entityName}
                         </p>
                       </div>
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getActionColor(activity.action)}`}>
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0 ${getActionColor(activity.action)}`}>
                         {getActionText(activity.action)}
                       </span>
                     </div>
-                    <div className="mt-2 flex items-center text-sm text-gray-500">
-                      <svg className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <div className="mt-1 flex items-center text-xs text-gray-500">
+                      <svg className="flex-shrink-0 mr-1 h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
                       </svg>
                       {formatDate(activity.timestamp)}

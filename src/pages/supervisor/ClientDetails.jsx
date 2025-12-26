@@ -47,9 +47,9 @@ export default function ClientDetails({ user, onLogout }) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div>
       {/* Main Content */}
-      <main className="p-6">
+      <main>
         {/* Client Header */}
         <div className="mb-6">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between">

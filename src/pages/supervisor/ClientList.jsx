@@ -74,13 +74,12 @@ export default function ClientList({ user, onLogout }) {
                   <th className="w-1/6">Contact Person</th>
                   <th className="w-1/6">Phone</th>
                   <th className="w-1/6">Status</th>
-                  <th className="w-1/6 text-right">View Details</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredClients.length > 0 ? (
                   filteredClients.map((client) => (
-                    <tr key={client.id} className="cursor-pointer hover:bg-gray-50" onClick={() => handleSelectClient(client.id)}>
+                    <tr key={client.id}>
                       <td>
                         <div className="font-medium text-gray-900">{client.name}</div>
                         <div className="text-gray-500 text-sm">{client.email}</div>
@@ -93,22 +92,11 @@ export default function ClientList({ user, onLogout }) {
                           {client.status}
                         </span>
                       </td>
-                      <td className="text-right">
-                        <button 
-                          className="btn btn-primary"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleSelectClient(client.id);
-                          }}
-                        >
-                          View Details
-                        </button>
-                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="6" className="text-center py-12">
+                    <td colSpan="5" className="text-center py-12">
                       <div className="flex flex-col items-center justify-center">
                         <svg className="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -127,7 +115,7 @@ export default function ClientList({ user, onLogout }) {
           <div className="block md:hidden">
             {filteredClients.length > 0 ? (
               filteredClients.map((client) => (
-                <div key={client.id} className="border-b border-gray-200 py-4 last:border-b-0 cursor-pointer hover:bg-gray-50" onClick={() => handleSelectClient(client.id)}>
+                <div key={client.id} className="border-b border-gray-200 py-4 last:border-b-0">
                   <div className="flex justify-between items-start">
                     <div className="flex-1 min-w-0">
                       <div className="font-medium text-gray-900 truncate">{client.name}</div>
@@ -148,17 +136,6 @@ export default function ClientList({ user, onLogout }) {
                           </span>
                         </div>
                       </div>
-                    </div>
-                    <div className="ml-4">
-                      <button 
-                        className="btn btn-primary"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleSelectClient(client.id);
-                        }}
-                      >
-                        View Details
-                      </button>
                     </div>
                   </div>
                 </div>

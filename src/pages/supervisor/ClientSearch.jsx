@@ -1,26 +1,38 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
-
-const mockClients = [
-  { id: 1, name: 'ABC Publishers', company: 'ABC Publishing House' },
-  { id: 2, name: 'XYZ Books', company: 'XYZ Educational Solutions' },
-  { id: 3, name: 'DEF Publications', company: 'DEF Media Group' },
-  { id: 4, name: 'GHI Printers', company: 'GHI Printing Services' }
-];
+import DataService from '../../services/dataService';
 
 export default function ClientSearch({ user, onLogout }) {
   const [searchTerm, setSearchTerm] = useState('');
+  const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const clientData = await DataService.getClients();
+        setClients(clientData);
+      } catch (error) {
+        console.error('Error fetching clients:', error);
+        setClients([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchClients();
+  }, []);
 
   const handleLogout = () => {
     onLogout();
     navigate('/login');
   };
 
-  const filteredClients = mockClients.filter(client => 
-    client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    client.company.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredClients = clients.filter(client => 
+    client.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    client.company?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleSelectClient = (clientId) => {
@@ -77,7 +89,11 @@ export default function ClientSearch({ user, onLogout }) {
 
             {searchTerm && (
               <div className="mt-6 space-y-3">
-                {filteredClients.length > 0 ? (
+                {loading ? (
+                  <div className="flex justify-center items-center py-8">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+                  </div>
+                ) : filteredClients.length > 0 ? (
                   filteredClients.map(client => (
                     <div 
                       key={client.id} 
@@ -89,9 +105,6 @@ export default function ClientSearch({ user, onLogout }) {
                           <h3 className="font-medium text-gray-900 text-lg">{client.name}</h3>
                           <p className="text-gray-600 text-sm mt-1">{client.company}</p>
                         </div>
-                        <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                        </svg>
                       </div>
                     </div>
                   ))
@@ -108,13 +121,19 @@ export default function ClientSearch({ user, onLogout }) {
             )}
 
             {!searchTerm && (
-              <div className="text-center py-12">
-                <svg className="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <h3 className="mt-2 text-lg font-medium text-gray-900">Search for a client</h3>
-                <p className="mt-1 text-gray-500">Enter a client name or company to begin searching</p>
-              </div>
+              loading ? (
+                <div className="flex justify-center items-center py-12">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <svg className="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  <h3 className="mt-2 text-lg font-medium text-gray-900">Search for a client</h3>
+                  <p className="mt-1 text-gray-500">Enter a client name or company to begin searching</p>
+                </div>
+              )
             )}
           </div>
         </div>

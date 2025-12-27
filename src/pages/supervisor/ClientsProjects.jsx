@@ -137,17 +137,13 @@ export default function ClientsProjects({ user, onLogout }) {
                 {filteredClients.map(client => (
                   <div 
                     key={client.id} 
-                    className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
-                    onClick={() => handleSelectClient(client.id)}
+                    className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
                   >
                     <div className="flex justify-between items-start">
                       <div>
                         <h3 className="font-medium text-gray-900 text-lg">{client.name}</h3>
                         <p className="text-gray-600 text-sm mt-1">{client.company}</p>
                       </div>
-                      <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                      </svg>
                     </div>
                   </div>
                 ))}

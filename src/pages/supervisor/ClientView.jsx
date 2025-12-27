@@ -1,22 +1,39 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
-
-const mockClients = [];
+import DataService from '../../services/dataService';
 
 export default function ClientView({ user, onLogout }) {
   const [searchTerm, setSearchTerm] = useState('');
+  const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const clientData = await DataService.getClients();
+        setClients(clientData);
+      } catch (error) {
+        console.error('Error fetching clients:', error);
+        setClients([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchClients();
+  }, []);
 
   const handleLogout = () => {
     onLogout();
     navigate('/login');
   };
 
-  const filteredClients = mockClients.filter(client => 
-    client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    client.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    client.contactPerson.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredClients = clients.filter(client => 
+    client.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    client.company?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    client.contactPerson?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -73,7 +90,16 @@ export default function ClientView({ user, onLogout }) {
               </tr>
             </thead>
             <tbody>
-              {filteredClients.length > 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan="6" className="text-center py-12">
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+                      <p className="mt-4 text-gray-500">Loading clients...</p>
+                    </div>
+                  </td>
+                </tr>
+              ) : filteredClients.length > 0 ? (
                 filteredClients.map((client) => (
                   <tr key={client.id}>
                     <td>
@@ -112,7 +138,14 @@ export default function ClientView({ user, onLogout }) {
         
         {/* Card view for mobile */}
         <div className="block md:hidden">
-          {filteredClients.length > 0 ? (
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="flex flex-col items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+                <p className="mt-4 text-gray-500">Loading clients...</p>
+              </div>
+            </div>
+          ) : filteredClients.length > 0 ? (
             filteredClients.map((client) => (
               <div key={client.id} className="border-b border-gray-200 py-4 last:border-b-0">
                 <div className="flex justify-between items-start">

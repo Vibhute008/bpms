@@ -1,29 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-
-// Load clients from localStorage or use empty array
-const loadClients = () => {
-  const savedClients = localStorage.getItem('bossClients');
-  if (savedClients) {
-    try {
-      return JSON.parse(savedClients);
-    } catch (error) {
-      console.error('Error parsing clients from localStorage:', error);
-      return [];
-    }
-  }
-  return [];
-};
-
-const mockClients = loadClients();
+import DataService from '../../services/dataService';
 
 export default function ClientDetails({ user, onLogout }) {
   const { clientId } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('details');
-
-  // Get client data
-  const client = mockClients.find(c => c.id === parseInt(clientId)) || {};
+  const [client, setClient] = useState({});
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const fetchClient = async () => {
+      try {
+        const clients = await DataService.getClients();
+        const foundClient = clients.find(c => c.id === parseInt(clientId)) || {};
+        setClient(foundClient);
+      } catch (error) {
+        console.error('Error fetching client:', error);
+        setClient({});
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchClient();
+  }, [clientId]);
 
   // Empty data structure for factory projects
   const factoryProjects = [];
@@ -45,6 +46,14 @@ export default function ClientDetails({ user, onLogout }) {
       default: return 'Unknown';
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
 
   return (
     <div>

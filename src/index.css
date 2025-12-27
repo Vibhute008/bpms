@@ -352,7 +352,7 @@ body {
 
 /* Action Card */
 .action-card {
-  @apply bg-white rounded-xl shadow-sm border border-gra\y-200 p-6 hover:shadow-md transition-shadow cursor-pointer;
+  @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer;
 }
 
 .action-icon {
